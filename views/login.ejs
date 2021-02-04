@@ -5,18 +5,14 @@
       <section>
         <form id="login">
           <label>Email</label>
-          <input type="text" name="login" />
+          <input type="text" name="login" placeholder="Email"/>
           <label>Password</label>
-          <input type="password" name="password" />
+          <input type="password"  name="password" placeholder="Password"/>
           <button>Log in</button>
           <h1 style="text-align: center;">Sign in with Google Example </h1>
-          <button class="google-btn" onclick="googleSignIn()" id="google "><i class="fab fa-google fa-1x"></i>
-            Google
-            Sign</button>
-
-
-          <a href="/signup">Signup</button>
-
+          <button onclick="googleSignIn()">Google Sign</button>
+          <div id="firebaseui-auth-container"></div>
+          <div id="loader">Abc...</div>
         </form>
       </section>
       <%- include('common/authFooter'); -%>

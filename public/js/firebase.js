@@ -122,3 +122,39 @@ window.addEventListener("DOMContentLoaded", () => {
     }
 
 });
+//omer Code
+//   googleSigningIn=()=>{
+// firebase
+//    .auth()
+
+// var firebase = require('firebase');
+//     var firebaseui = require('firebaseui');
+//     var ui = new firebaseui.auth.AuthUI(firebase.auth());
+//     ui.start('#firebaseui-auth-container', {
+//         signInOptions: [
+//           firebase.auth.EmailAuthProvider.PROVIDER_ID
+//         ],
+        
+//       });
+//       ui.start('#firebaseui-auth-container', {
+//         signInOptions: [
+//           {
+//             provider: firebase.auth.EmailAuthProvider.PROVIDER_ID,
+//             requireDisplayName: false
+//           }
+//         ]
+//       });
+//       if (ui.isPendingRedirect()) {
+//         ui.start('#firebaseui-auth-container', uiConfig);
+//       }
+//       ui.start('#firebaseui-auth-container', {
+//         signInOptions: [
+          
+//           firebase.auth.GoogleAuthProvider.PROVIDER_ID,
+//           firebase.auth.FacebookAuthProvider.PROVIDER_ID,
+//           firebase.auth.TwitterAuthProvider.PROVIDER_ID,
+//           firebase.auth.GithubAuthProvider.PROVIDER_ID
+//         ],
+        
+//       });
+//     }
