@@ -40,7 +40,7 @@ app.all("*", (req, res, next) => {
 });
 
 app.get("/login", function (req, res) {
-    res.render("login");
+    res.render("login", { csrfToken: req.csrfToken() });
 });
 
 app.get("/signup", function (req, res) {
@@ -48,6 +48,7 @@ app.get("/signup", function (req, res) {
 });
 
 app.post("/authLogin", (req, res) => {
+    console.log('agyaaa', req.body)
     const idToken = req.body.idToken.toString();
     const data = req.body.data;
     const expiresIn = 60 * 60 * 24 * 5 * 1000;
@@ -57,21 +58,24 @@ app.post("/authLogin", (req, res) => {
         .createSessionCookie(idToken, { expiresIn })
         .then(
             (sessionCookie) => {
+                console.log('sessionCookie', sessionCookie)
                 const options = { maxAge: expiresIn, httpOnly: true };
                 res.cookie('data', data, options);
                 res.cookie("session", sessionCookie, options);
                 res.end(JSON.stringify({ status: "success" }));
             },
             (error) => {
+                console.log('error', error)
                 res.status(401).send(error);
             }
         );
 });
 
 app.get("/profile", async function (req, res) {
+    console.log('agya profile pr')
     const sessionCookie = req.cookies.session || "";
     const data = req.cookies.data || null;
-    console.log(data);
+    console.log('data', data);
     admin
         .auth()
         .verifySessionCookie(sessionCookie, true /** checkRevoked */)
