@@ -1,0 +1,40 @@
+<%- include('common/authHeader'); -%>
+
+    <body>
+        <main>
+            <h1>Profile page</h1>
+            <p>User ID - <%= data.userId %>
+            </p>
+            <p>User Name - <%= data.login %>
+            </p>
+
+            <a href="/sessionLogout">Log out</a>
+            <button type="button" id="signout">
+                Sign out
+            </button>
+            <div id="subscribe">
+                <h2>Buy!</h2>
+                <section class="products"></section>
+            </div>
+            <section id="my-subscription">
+                <h2>My subscription</h2>
+                <p></p>
+                <h3>View invoices, update subscription & payment methods</h3>
+                <button id="billing-portal-button">Access customer portal</button>
+            </section>
+        </main>
+
+        <template id="product">
+            <div class="product">
+                <img src="" alt="" />
+                <h2>name</h2>
+                <p class="description">description</p>
+                <form class="product-form">
+                    <label for="price">Choose pricing plan</label>
+                    <select id="price" name="price"></select>
+                    <button type="submit">Subscribe</button>
+                </form>
+            </div>
+        </template>
+        <script src="https://js.stripe.com/v3/"></script>
+        <script src="js/firebase-stripe.js"></script>

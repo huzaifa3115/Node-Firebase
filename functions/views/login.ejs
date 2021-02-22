@@ -1,0 +1,11 @@
+<%- include('common/authHeader'); -%>
+
+  <body>
+    <section id="firebaseui-auth-container">
+      <div id="loader">Loading &hellip;</div>
+    </section>
+    <input type="hidden" name="_csrf" id="_csrf" value="<%= csrfToken %>">
+
+    <script src="js/firebaseui.js"></script>
+
+    <%- include('common/authFooter'); -%>

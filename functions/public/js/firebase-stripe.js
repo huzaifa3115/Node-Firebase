@@ -1,82 +1,38 @@
-const STRIPE_PUBLISHABLE_KEY = 'pk_test_NzVWw6MB7fN3HSeAvVnyf5tx00hTu3Ukrk';
+const STRIPE_PUBLISHABLE_KEY = '';
 
 // Replace with your tax ids
 // https://dashboard.stripe.com/tax-rates
-const taxRates = ['txr_1HCshzHYgolSBA35WkPjzOOi'];
-var firebaseConfig = {
-    apiKey: 'AIzaSyAEGmffBNUsVrdVS_iyiI4eUMOWWp4Q5dI',
-    authDomain: 'stripe-subs-ext.firebaseapp.com',
-    databaseURL: 'https://stripe-subs-ext.firebaseio.com',
-    projectId: 'stripe-subs-ext',
-    storageBucket: 'stripe-subs-ext.appspot.com',
-    messagingSenderId: '955066520266',
-    appId: '1:955066520266:web:ec7135a76fea7a1bce9a33',
+const taxRates = [''];
+const firebaseConfig = {
+    apiKey: '',
+    authDomain: '',
+    databaseURL: '',
+    projectId: '',
+    storageBucket: '',
+    messagingSenderId: '',
+    appId: '',
+    measurementId: '',
 };
 // Initialize Firebase
 // firebase.initializeApp(firebaseConfig);
 const firebaseApp = firebase.initializeApp(firebaseConfig);
 const db = firebaseApp.firestore();
-const functionLocation = 'us-east1';
+const functionLocation = 'us-central1';
 
-const firebaseUI = new firebaseui.auth.AuthUI(firebase.auth());
-const firebaseUiConfig = {
-    callbacks: {
-        signInSuccessWithAuthResult: function (authResult, redirectUrl) {
-            // if (authResult && authResult.user) {
-            //     let user = authResult.user;
-
-            //     user.getIdToken().then((idToken) => {
-            //         fetch("/authLogin", {
-            //             method: "POST",
-            //             headers: {
-            //                 Accept: "application/json",
-            //                 "Content-Type": "application/json",
-            //                 "CSRF-Token": document.getElementById("_csrf").value,
-            //             },
-            //             body: JSON.stringify({ idToken, data: { login: user.displayName, userId: user.uid } }),
-            //         }).then(() => {
-            //             // alert('huzaif');
-            //             window.location.assign("/profile");
-            //         }).catch((error) => {
-            //             if (error) {
-            //                 alert(error.message);
-            //             }
-            //         })
-            //     });
-            // }
-            return false
-        },
-        uiShown: () => {
-            document.querySelector('#loader').style.display = 'none';
-        },
-    },
-    signInFlow: 'popup',
-    // signInSuccessUrl: '/',
-    signInOptions: [
-        firebase.auth.GoogleAuthProvider.PROVIDER_ID,
-        firebase.auth.EmailAuthProvider.PROVIDER_ID,
-    ],
-    credentialHelper: firebaseui.auth.CredentialHelper.NONE,
-    tosUrl: 'https://example.com/terms',
-    privacyPolicyUrl: 'https://example.com/privacy',
-};
 
 firebase.auth().onAuthStateChanged((firebaseUser) => {
     if (firebaseUser) {
-        document.querySelector('#loader').style.display = 'none';
-        document.querySelector('main').style.display = 'block';
         currentUser = firebaseUser.uid;
         startDataListeners();
     } else {
-        document.querySelector('main').style.display = 'none';
-        firebaseUI.start('#firebaseui-auth-container', firebaseUiConfig);
+        signout();
     }
 });
 
-signout()
 
 function signout(params) {
-    firebase.auth().signOut()
+    firebase.auth().signOut();
+    window.location.assign('/sessionLogout');
 }
 
 //  STRIPE
@@ -88,7 +44,8 @@ function startDataListeners() {
     db.collection('products')
         .where('active', '==', true)
         .get()
-        .then(function (querySnapshot) {
+        .then((querySnapshot) => {
+            console.log('hi');
             querySnapshot.forEach(async function (doc) {
                 const priceSnap = await doc.ref
                     .collection('prices')
@@ -103,8 +60,7 @@ function startDataListeners() {
                 const container = template.content.cloneNode(true);
 
                 container.querySelector('h2').innerText = product.name.toUpperCase();
-                container.querySelector('.description').innerText =
-                    product.description?.toUpperCase() || '';
+                container.querySelector('.description').innerText = product.description?.toUpperCase() || '';
                 // Prices dropdown
                 priceSnap.docs.forEach((doc) => {
                     const priceId = doc.id;
@@ -114,7 +70,7 @@ function startDataListeners() {
                             style: 'currency',
                             currency: priceData.currency,
                         }).format((priceData.unit_amount / 100).toFixed(2))} per ${priceData.interval
-                        }`
+                        }`,
                     );
                     const option = document.createElement('option');
                     option.value = priceId;
@@ -140,6 +96,7 @@ function startDataListeners() {
         .collection('subscriptions')
         .where('status', 'in', ['trialing', 'active'])
         .onSnapshot(async (snapshot) => {
+            // console.log('huasf', snapshot.docs[0])
             if (snapshot.empty) {
                 // Show products
                 document.querySelector('#subscribe').style.display = 'block';
@@ -151,12 +108,12 @@ function startDataListeners() {
             const subscription = snapshot.docs[0].data();
             const priceData = (await subscription.price.get()).data();
             document.querySelector(
-                '#my-subscription p'
+                '#my-subscription p',
             ).textContent = `You are paying ${new Intl.NumberFormat('en-US', {
                 style: 'currency',
                 currency: priceData.currency,
             }).format((priceData.unit_amount / 100).toFixed(2))} per ${priceData.interval
-                }, giving you the role: ${await getCustomClaimRole()}. 🥳`;
+                }`;
         });
 }
 
@@ -182,7 +139,7 @@ async function subscribe(event) {
         .add({
             price: formData.get('price'),
             allow_promotion_codes: true,
-            tax_rates: taxRates,
+            // tax_rates: taxRates,
             success_url: window.location.origin,
             cancel_url: window.location.origin,
             metadata: {
@@ -225,5 +182,6 @@ document
 async function getCustomClaimRole() {
     await firebase.auth().currentUser.getIdToken(true);
     const decodedToken = await firebase.auth().currentUser.getIdTokenResult();
+    console.log(decodedToken);
     return decodedToken.claims.stripeRole;
 }
