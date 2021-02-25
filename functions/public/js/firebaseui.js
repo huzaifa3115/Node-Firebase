@@ -1,4 +1,8 @@
+const STRIPE_PUBLISHABLE_KEY = 'pk_test_51IGs8kA2cqiuOMLwr1LfxWdXDSSDOsvZEhAjTBvkIJ42Ig8Vh8bhgiCnv2b5R8IZpHJEmXw72BQQ635ZClbjXJSG00AHK6HuKM';
 
+// Replace with your tax ids
+// https://dashboard.stripe.com/tax-rates
+const taxRates = ['txr_1HCshzHYgolSBA35WkPjzOOi'];
 const firebaseConfig = {
     apiKey: '',
     authDomain: '',
@@ -20,6 +24,13 @@ const firebaseUiConfig = {
             console.log(authResult.user);
             if (authResult && authResult.user) {
                 const user = authResult.user;
+
+                if (!user.emailVerified) {
+                    user.sendEmailVerification();
+                    alert('Please verify your email first');
+                    window.location.assign('/login');
+                    return false;
+                }
 
                 user.getIdToken().then((idToken) => {
                     fetch('/authLogin', {
@@ -51,8 +62,6 @@ const firebaseUiConfig = {
     signInOptions: [
         {
             provider: firebase.auth.EmailAuthProvider.PROVIDER_ID,
-            signInMethod: firebase.auth.EmailAuthProvider.EMAIL_LINK_SIGN_IN_METHOD,
-
         },
         {
             provider: firebase.auth.GoogleAuthProvider.PROVIDER_ID,

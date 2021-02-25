@@ -11,10 +11,7 @@ const cors = require('cors');
 
 const firebaseConfig = require('./firebaseServicekey.json');
 
-admin.initializeApp({
-    credential: admin.credential.cert(firebaseConfig),
-    databaseURL: '',
-});
+admin.initializeApp({ credential: admin.credential.cert(firebaseConfig) });
 
 // admin.initializeApp(functions.config().firebase);
 const db = admin.firestore();

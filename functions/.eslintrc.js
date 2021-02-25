@@ -14,7 +14,7 @@ module.exports = {
     'google',
   ],
   'rules': {
-    // "quotes": ["error", "double"],
+    "quotes": 'off',
     'require-jsdoc': 0,
     'max-len': 'off',
     'no-undef': 'off',
@@ -26,5 +26,6 @@ module.exports = {
     'space-before-function-paren': 'off',
     'linebreak-style': 'off',
     'eol-last': 'off',
+    'padded-blocks': 'off'
   },
 };

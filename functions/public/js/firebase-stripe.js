@@ -1,8 +1,8 @@
-const STRIPE_PUBLISHABLE_KEY = '';
+const STRIPE_PUBLISHABLE_KEY = 'pk_test_51IGs8kA2cqiuOMLwr1LfxWdXDSSDOsvZEhAjTBvkIJ42Ig8Vh8bhgiCnv2b5R8IZpHJEmXw72BQQ635ZClbjXJSG00AHK6HuKM';
 
 // Replace with your tax ids
 // https://dashboard.stripe.com/tax-rates
-const taxRates = [''];
+const taxRates = ['txr_1HCshzHYgolSBA35WkPjzOOi'];
 const firebaseConfig = {
     apiKey: '',
     authDomain: '',
